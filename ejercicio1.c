@@ -18,9 +18,9 @@ int main() {
         return 1;
     }
 
-    char buffer[100];
-    fgets(buffer, sizeof(buffer), archivo);
-    printf("Contenido del archivo: %s", buffer);
+    char linea[100];
+    fgets(linea, sizeof(linea), archivo);
+    printf("Contenido del archivo: %s", linea);
 
     fclose(archivo);
     return 0;
