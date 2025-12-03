@@ -1,56 +1,39 @@
 #include <stdio.h>
-#include <ctype.h>
 
-void to_lowercase (char *cadena) {
-    int i =0;
-    int j;
-    int inicio;
-    char temp;
-
-    while (cadena[i] != '\0') {
-        cadena[i] = tolower ((unsigned char) cadena[i]);
-        i++;
-    }
-
-    j = i -1;
-    inicio = 0;
-
-    while (inicio < j) {
-        temp = cadena[inicio];
-        cadena[inicio] = cadena[j];
-        cadena[j] = temp;
-        inicio++;
-        j--;
-    }
-}
 
 int main() {
-    FILE *origen , *destino;
-    origen = fopen("original.txt", "r");
-    if (origen == NULL) {
-        perror("Error opening file");
+    FILE *origen = fopen("ejemplo.txt", "r");
+    FILE *destino = fopen("destino.txt", "w");  // lo crea si no existe
+
+    if (!origen) {
+        printf("No se pudo abrir ejemplo.txt\n");
         return 1;
     }
-
-    destino = fopen("destino.txt", "w");
-    if (destino == NULL) {
-        perror("Error opening file");
+    if (!destino) {
+        printf("No se pudo crear destino.txt\n");
         fclose(origen);
         return 1;
     }
-    char buffer [100];
-    int len = 0;
-    int c;
 
-    while (c(fgetc(origen) ) != EOF) {
-        buffer[len++] = (char)c;
+    char buffer[1024];
+    int len = 0;
+
+    char c;
+    while ((c = fgetc(origen)) != EOF) {
+        buffer[len++] = c;
     }
     buffer[len] = '\0';
-    to_lowercase(buffer);
-    fputs(buffer, destino);
+
+    for (int i = 0; i < len / 2; i++) {
+        char temp = buffer[i];
+        buffer[i] = buffer[len - 1 - i];
+        buffer[len - 1 - i] = temp;
+    }
+    fprintf(destino, "%s", buffer);
 
     fclose(origen);
     fclose(destino);
 
-    printf("Archivo procesado y escrito al reves en destino.txt.\n");
+    printf("Archivo destino.txt creado y escrito correctamente.\n");
+    return 0;
 }
